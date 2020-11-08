@@ -58,8 +58,9 @@ public class Config {
 	public static boolean midnightPatching;
 	public static boolean midnightPatchingFix;
 	public static boolean ic2Patching;
+	public static boolean giblyVCPatching;
 	public static boolean autoSteroDownmix;
-	
+
 	// misc
 	public static boolean autoSteroDownmixLogging;
 	public static boolean injectorLogging;
@@ -184,6 +185,8 @@ public class Config {
 				"If true, readds The Midnight reverb that is removed with the patch.");
 		ic2Patching = this.forgeConfig.getBoolean("Patch IC2", categoryCompatibility, true,
 				"REQUIRES RESTART. If true, patches IC2 audio to better work with Sound Physics.");
+		giblyVCPatching = this.forgeConfig.getBoolean("Patch Gibly's Voice Chat", categoryCompatibility, true,
+				"REQUIRES RESTART. If true, patches Gibly's VC's copied soundsystem classes to restore Sound Physics.");
 		autoSteroDownmix = this.forgeConfig.getBoolean("Auto Stereo Downmix", categoryCompatibility, true,
 				"REQUIRES RESTART. If true, Automatically downmix stereo sounds that are loaded to mono");
 

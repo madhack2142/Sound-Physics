@@ -88,26 +88,32 @@ public class CoreModInjector implements IClassTransformer {
 					AbstractInsnNode.METHOD_INSN, "setVolume", null, -1, toInject, true, 0, 0, false, 0, -1);
 		} else
 
-		if (obfuscated.equals("paulscode.sound.libraries.SourceLWJGLOpenAL")) {
+		if (obfuscated.equals("paulscode.sound.libraries.SourceLWJGLOpenAL") ||
+			(obfuscated.equals("ovr.paulscode.sound.libraries.SourceLWJGLOpenAL") && Config.giblyVCPatching)) {
+			final String classPath = obfuscated.replace(".","/");
+			String channelPath = "paulscode/sound/libraries/ChannelLWJGLOpenAL";
+			if (obfuscated.equals("ovr.paulscode.sound.libraries.SourceLWJGLOpenAL"))
+				channelPath = "ovr/"+channelPath;
+
 			// Inside SourceLWJGLOpenAL
 			InsnList toInject = new InsnList();
 
 			toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
-			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "paulscode/sound/libraries/SourceLWJGLOpenAL", "position",
+			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, classPath, "position",
 					"Lpaulscode/sound/Vector3D;"));
 			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "paulscode/sound/Vector3D", "x", "F"));
 			toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
-			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "paulscode/sound/libraries/SourceLWJGLOpenAL", "position",
+			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, classPath, "position",
 					"Lpaulscode/sound/Vector3D;"));
 			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "paulscode/sound/Vector3D", "y", "F"));
 			toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
-			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "paulscode/sound/libraries/SourceLWJGLOpenAL", "position",
+			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, classPath, "position",
 					"Lpaulscode/sound/Vector3D;"));
 			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "paulscode/sound/Vector3D", "z", "F"));
 			toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
-			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "paulscode/sound/libraries/SourceLWJGLOpenAL",
-					"channelOpenAL", "Lpaulscode/sound/libraries/ChannelLWJGLOpenAL;"));
-			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "paulscode/sound/libraries/ChannelLWJGLOpenAL", "ALSource",
+			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, classPath,
+					"channelOpenAL", "L"+channelPath+";"));
+			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, channelPath, "ALSource",
 					"Ljava/nio/IntBuffer;"));
 			toInject.add(new InsnNode(Opcodes.ICONST_0));
 			toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "java/nio/IntBuffer", "get", "(I)I", false));
@@ -120,7 +126,8 @@ public class CoreModInjector implements IClassTransformer {
 		} else
 
 		// Convert stero sounds to mono
-		if (obfuscated.equals("paulscode.sound.libraries.LibraryLWJGLOpenAL") && Config.autoSteroDownmix) {
+		if ((obfuscated.equals("paulscode.sound.libraries.LibraryLWJGLOpenAL") ||
+			(obfuscated.equals("ovr.paulscode.sound.libraries.LibraryLWJGLOpenAL") && Config.giblyVCPatching)) && Config.autoSteroDownmix) {
 			// Inside LibraryLWJGLOpenAL
 			InsnList toInject = new InsnList();
 
@@ -140,17 +147,17 @@ public class CoreModInjector implements IClassTransformer {
 
 			toInject = new InsnList();
 
-			toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
-			toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
+			toInject.add(new VarInsnNode(Opcodes.ALOAD, 2));
 
 			toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/sonicether/soundphysics/SoundPhysics",
 					"onLoadSound", "(Lpaulscode/sound/SoundBuffer;Ljava/lang/String;)Lpaulscode/sound/SoundBuffer;", false));
 
-			toInject.add(new VarInsnNode(Opcodes.ASTORE, 0));
+			toInject.add(new VarInsnNode(Opcodes.ASTORE, 1));
+			toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
 
 			// Target method: loadSound 
 			bytes = patchMethodInClass(obfuscated, bytes, "loadSound", "(Lpaulscode/sound/SoundBuffer;Ljava/lang/String;)Z", Opcodes.INVOKEVIRTUAL,
-					AbstractInsnNode.METHOD_INSN, "getChannels", null, -1, toInject, true, 0, 0, false, -12, -1);
+					AbstractInsnNode.METHOD_INSN, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", -1, toInject, true, 0, 0, false, 0, 0);
 		} else
 
 		if (obfuscated.equals("paulscode.sound.SoundSystem")) {
