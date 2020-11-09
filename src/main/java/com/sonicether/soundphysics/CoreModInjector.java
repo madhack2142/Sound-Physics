@@ -89,7 +89,7 @@ public class CoreModInjector implements IClassTransformer {
 		} else
 
 		if (obfuscated.equals("paulscode.sound.libraries.SourceLWJGLOpenAL") ||
-			(obfuscated.equals("ovr.paulscode.sound.libraries.SourceLWJGLOpenAL") && Config.giblyVCPatching)) {
+			(obfuscated.equals("ovr.paulscode.sound.libraries.SourceLWJGLOpenAL") && Config.glibyVCPatching)) {
 			final String classPath = obfuscated.replace(".","/");
 			String channelPath = "paulscode/sound/libraries/ChannelLWJGLOpenAL";
 			if (obfuscated.equals("ovr.paulscode.sound.libraries.SourceLWJGLOpenAL"))
@@ -127,7 +127,7 @@ public class CoreModInjector implements IClassTransformer {
 
 		// Convert stero sounds to mono
 		if ((obfuscated.equals("paulscode.sound.libraries.LibraryLWJGLOpenAL") ||
-			(obfuscated.equals("ovr.paulscode.sound.libraries.LibraryLWJGLOpenAL") && Config.giblyVCPatching)) && Config.autoSteroDownmix) {
+			(obfuscated.equals("ovr.paulscode.sound.libraries.LibraryLWJGLOpenAL") && Config.glibyVCPatching)) && Config.autoSteroDownmix) {
 			// Inside LibraryLWJGLOpenAL
 			InsnList toInject = new InsnList();
 
@@ -257,6 +257,7 @@ public class CoreModInjector implements IClassTransformer {
 			// Inside AudioPacket
 			InsnList toInject = new InsnList();
 
+			// This probably should only get multipled once, i don't know why i do it twice
 			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
 					"soundDistanceAllowance", "D"));
 			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
@@ -535,6 +536,199 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: updateVolume
 			bytes = patchMethodInClass(obfuscated, bytes, "updateVolume", "(Lnet/minecraft/entity/player/EntityPlayer;)V", Opcodes.FCMPG,
 					AbstractInsnNode.INSN, null, null, -1, toInject, false, 0, 0, true, 0, -1);
+		} else
+
+		if (obfuscated.equals("net.gliby.voicechat.client.sound.ClientStreamManager") && Config.glibyVCSrcPatching) {
+
+			InsnList toInject = new InsnList();
+
+			toInject.add(new VarInsnNode(Opcodes.ALOAD, 4));
+			toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/gliby/voicechat/common/PlayerProxy", "getPlayer", "()Lnet/minecraft/entity/Entity;", false));
+			toInject.add(new InsnNode(Opcodes.ACONST_NULL));
+			toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"calculateEntitySoundOffset", "(Lvg;Lqe;)D", false));
+			toInject.add(new InsnNode(Opcodes.D2F));
+			toInject.add(new InsnNode(Opcodes.FADD));
+
+			// Target method: createStream
+			bytes = patchMethodInClass(obfuscated, bytes, "createStream", "(Lnet/gliby/voicechat/client/sound/Datalet;)V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "rawDataStream", null, -1, toInject, true, 0, 0, false, -8, 0);
+
+			toInject = new InsnList();
+
+			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"attenuationModel", "I"));
+			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"globalRolloffFactor", "F"));
+
+			// Target method: createStream
+			bytes = patchMethodInClass(obfuscated, bytes, "createStream", "(Lnet/gliby/voicechat/client/sound/Datalet;)V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "rawDataStream", null, -1, toInject, true, 6, 0, false, 0, 0);
+
+			toInject = new InsnList();
+
+			toInject.add(new InsnNode(Opcodes.DUP));
+			toInject.add(new VarInsnNode(Opcodes.ASTORE, 6));
+			toInject.add(new InsnNode(Opcodes.ACONST_NULL));
+			toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"calculateEntitySoundOffset", "(Lvg;Lqe;)D", false));
+			toInject.add(new VarInsnNode(Opcodes.ALOAD, 6));
+			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/entity/EntityPlayerSP", "field_70163_u", "D"));
+			toInject.add(new InsnNode(Opcodes.DADD));
+
+			// Target method: createStream
+			bytes = patchMethodInClass(obfuscated, bytes, "createStream", "(Lnet/gliby/voicechat/client/sound/Datalet;)V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "rawDataStream", null, -1, toInject, true, 0, 0, true, -13, 1);
+
+			toInject = new InsnList();
+
+			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"attenuationModel", "I"));
+			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"globalRolloffFactor", "F"));
+
+			// Target method: createStream
+			bytes = patchMethodInClass(obfuscated, bytes, "createStream", "(Lnet/gliby/voicechat/client/sound/Datalet;)V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "rawDataStream", null, -1, toInject, true, 6, 0, false, 0, 1);
+
+			toInject = new InsnList();
+
+			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"globalVolumeMultiplier0", "F"));
+			toInject.add(new InsnNode(Opcodes.FMUL));
+
+			// Target method: createStream
+			bytes = patchMethodInClass(obfuscated, bytes, "createStream", "(Lnet/gliby/voicechat/client/sound/Datalet;)V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "setVolume", null, -1, toInject, true, 0, 0, false, 0, 0);
+
+			toInject = new InsnList();
+
+			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"globalVolumeMultiplier0", "F"));
+			toInject.add(new InsnNode(Opcodes.FMUL));
+
+			// Target method: createStream
+			bytes = patchMethodInClass(obfuscated, bytes, "createStream", "(Lnet/gliby/voicechat/client/sound/Datalet;)V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "setVolume", null, -1, toInject, true, 0, 0, false, 0, 1);
+
+			toInject = new InsnList();
+
+			toInject.add(new VarInsnNode(Opcodes.ALOAD, 4));
+			toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"onPlaySound", "(Ljava/lang/String;)V", false));
+
+			// Target method: giveStream
+			bytes = patchMethodInClass(obfuscated, bytes, "giveStream", "(Lnet/gliby/voicechat/client/sound/Datalet;)V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "feedRawAudioData", null, -1, toInject, false, 0, 0, false, 0, -1);
+
+		} else
+
+		if (obfuscated.equals("net.gliby.voicechat.client.sound.thread.ThreadUpdateStream") && Config.glibyVCSrcPatching) {
+
+			InsnList toInject = new InsnList();
+
+			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"globalVolumeMultiplier0", "F"));
+			toInject.add(new InsnNode(Opcodes.FMUL));
+
+			// Target method: run
+			bytes = patchMethodInClass(obfuscated, bytes, "run", "()V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "setVolume", null, -1, toInject, true, 0, 0, false, 0, 0);
+
+			toInject = new InsnList();
+
+			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"globalVolumeMultiplier0", "F"));
+			toInject.add(new InsnNode(Opcodes.FMUL));
+
+			// Target method: run
+			bytes = patchMethodInClass(obfuscated, bytes, "run", "()V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "setVolume", null, -1, toInject, true, 0, 0, false, 0, 1);
+
+			toInject = new InsnList();
+
+			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"attenuationModel", "I"));
+
+			// Target method: run
+			bytes = patchMethodInClass(obfuscated, bytes, "run", "()V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "setAttenuation", null, -1, toInject, true, 1, 0, false, 0, -1);
+
+			toInject = new InsnList();
+
+			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"globalRolloffFactor", "F"));
+
+			// Target method: run
+			bytes = patchMethodInClass(obfuscated, bytes, "run", "()V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "setDistOrRoll", null, -1, toInject, true, 5, 0, false, 0, -1);
+
+			toInject = new InsnList();
+
+			toInject.add(new VarInsnNode(Opcodes.ALOAD, 3));
+			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "net/gliby/voicechat/client/sound/ClientStream", "player", "Lnet/gliby/voicechat/common/PlayerProxy;"));
+			toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/gliby/voicechat/common/PlayerProxy", "getPlayer", "()Lnet/minecraft/entity/Entity;", false));
+			toInject.add(new InsnNode(Opcodes.ACONST_NULL));
+			toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"calculateEntitySoundOffset", "(Lvg;Lqe;)D", false));
+			toInject.add(new InsnNode(Opcodes.D2F));
+			toInject.add(new InsnNode(Opcodes.FADD));
+
+			// Target method: createStream
+			bytes = patchMethodInClass(obfuscated, bytes, "run", "()V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "setPosition", null, -1, toInject, true, 0, 0, false, -2, 0);
+
+			toInject = new InsnList();
+
+			toInject.add(new InsnNode(Opcodes.DUP));
+			toInject.add(new VarInsnNode(Opcodes.ASTORE, 7));
+			toInject.add(new InsnNode(Opcodes.ACONST_NULL));
+			toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"calculateEntitySoundOffset", "(Lvg;Lqe;)D", false));
+			toInject.add(new VarInsnNode(Opcodes.ALOAD, 7));
+			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/entity/EntityPlayerSP", "field_70163_u", "D"));
+			toInject.add(new InsnNode(Opcodes.DADD));
+
+			// Target method: createStream
+			bytes = patchMethodInClass(obfuscated, bytes, "run", "()V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "setPosition", null, -1, toInject, true, 0, 0, true, -7, 1);
+
+			toInject = new InsnList();
+
+			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"globalVolumeMultiplier0", "F"));
+			toInject.add(new InsnNode(Opcodes.FMUL));
+
+			// Target method: run
+			bytes = patchMethodInClass(obfuscated, bytes, "run", "()V", Opcodes.INVOKEVIRTUAL,
+					AbstractInsnNode.METHOD_INSN, "setVolume", null, -1, toInject, true, 0, 0, false, 0, 2);
+
+		} else
+
+		if (obfuscated.equals("net.gliby.voicechat.common.networking.ServerStreamManager") && Config.glibyVCSrcPatching) {
+
+			InsnList toInject = new InsnList();
+
+			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"soundDistanceAllowance", "D"));
+			toInject.add(new InsnNode(Opcodes.DMUL));
+
+			// Target method: feedWithinEntityWithRadius
+			bytes = patchMethodInClass(obfuscated, bytes, "feedWithinEntityWithRadius",
+					"(Lnet/gliby/voicechat/common/networking/ServerStream;Lnet/gliby/voicechat/common/networking/ServerDatalet;)V",
+					Opcodes.DCMPG, AbstractInsnNode.INSN, null, null, -1, toInject, true, 0, 0, false, 0, 0);
+
+			toInject = new InsnList();
+
+			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
+					"soundDistanceAllowance", "D"));
+			toInject.add(new InsnNode(Opcodes.DMUL));
+
+			// Target method: feedWithinEntityWithRadius
+			bytes = patchMethodInClass(obfuscated, bytes, "feedWithinEntityWithRadius",
+					"(Lnet/gliby/voicechat/common/networking/ServerStream;Lnet/gliby/voicechat/common/networking/ServerDatalet;)V",
+					Opcodes.DCMPG, AbstractInsnNode.INSN, null, null, -1, toInject, true, 0, 0, false, 0, 1);
+
 		}
 
 		//log("Finished processing class: '"+obfuscated+"' ('"+deobfuscated+"')");

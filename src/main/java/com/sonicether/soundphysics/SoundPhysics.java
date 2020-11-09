@@ -3,6 +3,12 @@ package com.sonicether.soundphysics;
 import java.util.regex.Pattern;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.nio.ByteOrder;
+
+import javax.sound.sampled.AudioFormat;
+
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.ALC10;
@@ -30,15 +36,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundBuffer;
-import javax.sound.sampled.AudioFormat;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import paulscode.sound.Library;
+import paulscode.sound.Source;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 @Mod(modid = SoundPhysics.modid, clientSideOnly = true, acceptedMinecraftVersions = SoundPhysics.mcVersion,
 	 version = SoundPhysics.version, guiFactory = "com.sonicether.soundphysics.SPGuiFactory")
@@ -261,6 +269,32 @@ public class SoundPhysics {
 	// For sounds that get played normally
 	public static void onPlaySound(final float posX, final float posY, final float posZ, final int sourceID) {
 		onPlaySound(posX, posY, posZ, sourceID, lastSoundCategory, lastSoundName, lastSoundAtt);
+	}
+
+	/**
+	 * CALLED BY ASM INJECTED CODE!
+	 */
+	// For Gliby's VC, sound system source id
+	// This is kind of hacked together, it's not great
+	public static void onPlaySound(final String id) {
+		try { // Getting the sound library here is not ideal but i can't really do better because gibly changes it after startup
+			Library sndLibrary = (Library)FieldUtils.readField(sndSystem,"soundLibrary",true);
+			if (sndLibrary == null)
+				return;
+
+			Source src = sndLibrary.getSource(id);
+			if (src == null || src.channel == null)
+				return;
+
+			IntBuffer srcid = (IntBuffer)FieldUtils.readField(src.channel,"ALSource");
+			if (srcid == null)
+				return;
+
+			onPlaySound(src.position.x, src.position.y, src.position.z, srcid.get(0), SoundCategory.PLAYERS, id, ISound.AttenuationType.LINEAR);
+		} catch (Exception e) {
+			logError("Error trying to get source info");
+			logError(e.toString());
+		}
 	}
 
 	/**
