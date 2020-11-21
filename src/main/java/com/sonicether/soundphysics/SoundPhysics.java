@@ -235,7 +235,10 @@ public class SoundPhysics {
 	// For IC2
 	public static void setLastSound(final int position, final String soundName) {
 		lastSoundCategory = position == 0 ? SoundCategory.BLOCKS : SoundCategory.PLAYERS;
-		lastSoundName = "ic2:"+soundName;
+		if (soundName != null)
+			lastSoundName = "ic2:"+soundName;
+		else // Can't get easliy get sound name for normal IC2 Classic sources
+			lastSoundName = "ic2";
 		lastSoundAtt = ISound.AttenuationType.LINEAR;
 	}
 
@@ -247,6 +250,18 @@ public class SoundPhysics {
 			(MathHelper.floor(x1) == MathHelper.floor(x2) &&
 			MathHelper.floor(y1) == MathHelper.floor(y2) &&
 			MathHelper.floor(z1) == MathHelper.floor(z2))) return 1;
+		if (dst == i) return 0;
+		return -1;
+	}
+
+	/**
+	 * CALLED BY ASM INJECTED CODE!
+	 */
+	public static int ic2DistanceCheckHook(double i, double dst, Vec3d p1, Vec3d p2) {
+		if (i >= dst ||
+			(MathHelper.floor(p1.x) == MathHelper.floor(p2.x) &&
+			MathHelper.floor(p1.y) == MathHelper.floor(p2.y) &&
+			MathHelper.floor(p1.z) == MathHelper.floor(p2.z))) return 1;
 		if (dst == i) return 0;
 		return -1;
 	}
@@ -357,6 +372,13 @@ public class SoundPhysics {
 		}
 
 		return entity.getEyeHeight();
+	}
+
+	/**
+	 * CALLED BY ASM INJECTED CODE!
+	 */
+	public static Vec3d calculateEntitySoundOffsetVec(final Vec3d pos, final Entity entity, final SoundEvent sound) {
+		return new Vec3d(pos.x,pos.y+calculateEntitySoundOffset(entity,sound),pos.z);
 	}
 
 	/**
