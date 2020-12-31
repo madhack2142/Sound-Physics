@@ -217,7 +217,7 @@ public class SoundPhysics {
 		lastSoundCategory = getSoundCategory(sc,lastSoundName);
 		lastSoundAtt = snd.getAttenuationType();
 		if (snd instanceof MovingSound)               // Hacky fix until i properly do moving sounds (I'm currently thinking about how)
-			lastSoundCategory = SoundCategory.MASTER; // because all (at least vanilla) moving sounds don't init their position when played
+			lastSoundCategory = SoundCategory.RECORDS;// because all (at least vanilla) moving sounds don't init their position when played
 	}
 
 	/**
