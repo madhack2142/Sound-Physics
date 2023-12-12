@@ -54,7 +54,7 @@ public class SoundPhysics {
 
 	public static final String modid = "soundphysics";
 	public static final String version = "${version}";
-	public static final String mcVersion = "${mc_version}";
+	public static final String mcVersion = "1.12.2";
 
 	public static final Logger logger = LogManager.getLogger(modid);
 
@@ -359,6 +359,7 @@ public class SoundPhysics {
 		}
 		buff.audioFormat = monoformat;
 		buff.trimData(buff.audioData.length/2);
+		buff.audioData = bb.array();
 		return buff;
 	}
 

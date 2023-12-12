@@ -2,13 +2,14 @@ package com.sonicether.soundphysics;
 
 import java.io.File;
 
-import java.util.Map;
+import java.util.*;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
+import zone.rong.mixinbooter.IEarlyMixinLoader;
 
 @MCVersion(value = SoundPhysics.mcVersion)
-public class CoreModLoader implements IFMLLoadingPlugin {
+public class CoreModLoader implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
 	public static File mcDir;
 
@@ -37,4 +38,18 @@ public class CoreModLoader implements IFMLLoadingPlugin {
 		return null;
 	}
 
+	@Override
+	public List<String> getMixinConfigs() {
+		return Arrays.asList("soundphysics.vanilla.mixin.json", "soundphysics.gliby.mixin.json");
+	}
+
+	@Override
+	public boolean shouldMixinConfigQueue(String mixinConfig) {
+		return true;
+		/*switch (mixinConfig) {
+			case "soundphysics.gliby.mixin.json": return Config.glibyVCPatching;
+			case "soundphysics.vanilla.mixin.json": return true;
+			default: return false;
+		}*/
+	}
 }

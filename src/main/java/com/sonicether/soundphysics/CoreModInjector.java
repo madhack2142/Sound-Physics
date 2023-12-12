@@ -62,7 +62,8 @@ public class CoreModInjector implements IClassTransformer {
 
 	@Override
 	public byte[] transform(final String obfuscated, final String deobfuscated, byte[] bytes) {
-		if (obfuscated.equals("chm$a")) {
+
+		/*if (obfuscated.equals("chm$a")) {
 			// Inside SoundManager.SoundSystemStarterThread
 			InsnList toInject = new InsnList();
 			toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
@@ -72,8 +73,8 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: Constructor
 			bytes = patchMethodInClass(obfuscated, bytes, "<init>", "(Lchm;)V", Opcodes.INVOKESPECIAL,
 					AbstractInsnNode.METHOD_INSN, "<init>", null, -1, toInject, false, 0, 0, false, 0, -1);
-		} else
-
+		} else*/
+		/*
 		if (obfuscated.equals("chm")) {
 			// Inside SoundManager
 			InsnList toInject = new InsnList();
@@ -96,9 +97,9 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: playSound, target invocation setVolume
 			bytes = patchMethodInClass(obfuscated, bytes, "c", "(Lcgt;)V", Opcodes.INVOKEVIRTUAL,
 					AbstractInsnNode.METHOD_INSN, "setVolume", null, -1, toInject, true, 0, 0, false, 0, -1);
-		} else
+		} else*/
 
-		if (obfuscated.equals("paulscode.sound.libraries.SourceLWJGLOpenAL") ||
+		/*if (obfuscated.equals("paulscode.sound.libraries.SourceLWJGLOpenAL") ||
 			(obfuscated.equals("ovr.paulscode.sound.libraries.SourceLWJGLOpenAL") && Config.glibyVCPatching)) {
 			// Inside SourceLWJGLOpenAL
 			InsnList toInject = new InsnList();
@@ -133,10 +134,10 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: play
 			bytes = patchMethodInClass(obfuscated, bytes, "play", "(Lpaulscode/sound/Channel;)V", Opcodes.INVOKEVIRTUAL,
 					AbstractInsnNode.METHOD_INSN, "play", null, -1, toInject, false, 0, 0, false, 0, -1);
-		} else
+		} else*/
 
 		// Convert stero sounds to mono
-		if ((obfuscated.equals("paulscode.sound.libraries.LibraryLWJGLOpenAL") ||
+		/*if ((obfuscated.equals("paulscode.sound.libraries.LibraryLWJGLOpenAL") ||
 			(obfuscated.equals("ovr.paulscode.sound.libraries.LibraryLWJGLOpenAL") && Config.glibyVCPatching)) && Config.autoSteroDownmix) {
 			// Inside LibraryLWJGLOpenAL
 			InsnList toInject = new InsnList();
@@ -168,9 +169,9 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: loadSound 
 			bytes = patchMethodInClass(obfuscated, bytes, "loadSound", "(Lpaulscode/sound/SoundBuffer;Ljava/lang/String;)Z", Opcodes.INVOKEVIRTUAL,
 					AbstractInsnNode.METHOD_INSN, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", -1, toInject, true, 0, 0, false, 0, 0);
-		} else
+		} else*/
 
-		if (obfuscated.equals("paulscode.sound.SoundSystem")) {
+		/*if (obfuscated.equals("paulscode.sound.SoundSystem")) {
 			// Inside SoundSystem
 			InsnList toInject = new InsnList();
 
@@ -196,9 +197,9 @@ public class CoreModInjector implements IClassTransformer {
 			bytes = patchMethodInClass(obfuscated, bytes, "newSource",
 					"(ZLjava/lang/String;Ljava/lang/String;ZFFFIF)V", Opcodes.INVOKESPECIAL,
 					AbstractInsnNode.METHOD_INSN, "<init>", null, -1, toInject, true, 2, 0, false, 0, -1);
-		} else
+		} else*/
 
-		if (obfuscated.equals("pl")) {
+		/*if (obfuscated.equals("pl")) {
 			// Inside PlayerList
 			InsnList toInject = new InsnList();
 
@@ -211,9 +212,9 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: sendToAllNearExcept
 			bytes = patchMethodInClass(obfuscated, bytes, "a", "(Laed;DDDDILht;)V", Opcodes.DCMPG,
 					AbstractInsnNode.INSN, "", "", -1, toInject, true, 0, 0, false, 0, -1);
-		} else
+		} else*/
 
-		if (obfuscated.equals("vg")) {
+		/*if (obfuscated.equals("vg")) {
 			// Inside Entity
 			InsnList toInject = new InsnList();
 
@@ -228,7 +229,7 @@ public class CoreModInjector implements IClassTransformer {
 			// Inside target method, target node: Entity/getSoundCategory
 			bytes = patchMethodInClass(obfuscated, bytes, "a", "(Lqe;FF)V", Opcodes.INVOKEVIRTUAL,
 					AbstractInsnNode.METHOD_INSN, "bK", null, -1, toInject, true, 0, 0, false, -3, -1);
-		} else
+		} else*/
 
 		// Fix for computronics's devices
 		if (obfuscated.equals("pl.asie.lib.audio.StreamingAudioPlayer") && Config.computronicsPatching) {
@@ -247,7 +248,7 @@ public class CoreModInjector implements IClassTransformer {
 			toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/sonicether/soundphysics/SoundPhysics",
 					"onPlaySoundAL", "(FFFI)V", false));
 
-			// Target method: play 
+			// Target method: play
 			bytes = patchMethodInClass(obfuscated, bytes, "play", "(Ljava/lang/String;FFFF)V", Opcodes.INVOKESTATIC,
 					AbstractInsnNode.METHOD_INSN, "alSourceQueueBuffers", null, -1, toInject, true, 0, 0, false, -5, -1);
 
