@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import paulscode.sound.SoundSystem;
 
-@Mixin(ThreadUpdateStream.class)
+@Mixin(value = ThreadUpdateStream.class, remap = false)
 public class MixinThreadUpdateStream {
 
     @Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/audio/SoundManager$SoundSystemStarterThread;setVolume(Ljava/lang/String;F)V"))

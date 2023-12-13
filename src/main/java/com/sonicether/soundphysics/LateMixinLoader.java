@@ -24,6 +24,8 @@ public class LateMixinLoader implements ILateMixinLoader {
                 return Loader.isModLoaded("computronics") && Config.computronicsPatching;
             case "soundphysics.umc.mixin.json":
                 return Loader.isModLoaded("universalmodcore") && Config.irPatching;
+            case "soundphysics.midnight.mixin.json":
+                return Loader.isModLoaded("midnight") && Config.midnightPatching;
             default: return ILateMixinLoader.super.shouldMixinConfigQueue(mixinConfig);
         }
     }

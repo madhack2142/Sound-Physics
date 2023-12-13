@@ -17,7 +17,7 @@ import paulscode.sound.SoundSystem;
 
 import javax.sound.sampled.AudioFormat;
 
-@Mixin(ClientStreamManager.class)
+@Mixin(value = ClientStreamManager.class, remap = false)
 public class MixinClientStreamManager {
     @Redirect(method = "createStream", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/audio/SoundManager$SoundSystemStarterThread;rawDataStream(Ljavax/sound/sampled/AudioFormat;ZLjava/lang/String;FFFIF)V"))
     public void rawDataStream1(@Coerce SoundSystem instance, AudioFormat audioFormat, boolean b, String s, float x, float y, float z, int i, float f, @Local PlayerProxy player) {

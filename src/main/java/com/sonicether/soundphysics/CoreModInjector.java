@@ -37,26 +37,13 @@ public class CoreModInjector implements IClassTransformer {
 
 	public static final Logger logger = LogManager.getLogger(SoundPhysics.modid+"injector");
 
-	private static boolean shouldPatchDS(boolean checkNew) {
-		if (Loader.isModLoaded("dsurround")) {
-			Map<String,ModContainer> mods = Loader.instance().getIndexedModList();
-			String version[] = mods.get("dsurround").getVersion().split("\\.");
-			if (version.length < 2) {
-				logError("What the hell, DS's version is not properly formatted ?");
-			} else if ((!checkNew && version[1].equals("5")) || (checkNew && version[1].equals("6"))) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	private static boolean isIC2Classic() {
 		if (Loader.isModLoaded("ic2")) {
 			Map<String,ModContainer> mods = Loader.instance().getIndexedModList();
 			String version = mods.get("ic2").getVersion();
-			if (version.endsWith("ex112")) return false;
-			return true;
-		}
+            return !version.endsWith("ex112");
+        }
 		return false;
 	}
 
