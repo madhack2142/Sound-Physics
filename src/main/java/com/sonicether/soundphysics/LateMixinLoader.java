@@ -18,8 +18,12 @@ public class LateMixinLoader implements ILateMixinLoader {
         switch (mixinConfig) {
             case "soundphysics.gliby.mixin.json":
                 return Loader.isModLoaded("gvc") && Config.glibyVCPatching;
+            case "soundphysics.glibysrc.mixin.json":
+                return Loader.isModLoaded("gvc") && Config.glibyVCSrcPatching;
             case "soundphysics.comp.mixin.json":
                 return Loader.isModLoaded("computronics") && Config.computronicsPatching;
+            case "soundphysics.umc.mixin.json":
+                return Loader.isModLoaded("universalmodcore") && Config.irPatching;
             default: return ILateMixinLoader.super.shouldMixinConfigQueue(mixinConfig);
         }
     }

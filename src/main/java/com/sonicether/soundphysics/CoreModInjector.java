@@ -343,7 +343,7 @@ public class CoreModInjector implements IClassTransformer {
 					AbstractInsnNode.INSN, "", null, -1, toInject, true, 0, 0, false, 0, -1);
 		} else*/
 
-		if ((obfuscated.equals("cam72cam.immersiverailroading.sound.ClientSound") || obfuscated.equals("cam72cam.mod.sound.ClientSound")) && Config.irPatching) {
+		/*if ((obfuscated.equals("cam72cam.immersiverailroading.sound.ClientSound") || obfuscated.equals("cam72cam.mod.sound.ClientSound")) && Config.irPatching) {
 			// Inside ClientSound
 			InsnList toInject = new InsnList();
 
@@ -383,7 +383,7 @@ public class CoreModInjector implements IClassTransformer {
 
 			// Target method: update
 			bytes = patchMethodInClass(obfuscated, bytes, "update", "()V", Opcodes.FMUL,
-					AbstractInsnNode.INSN, "", null, -1, toInject, true, 0, 0, false, 0, -1);
+					AbstractInsnNode.INSN, "", null, -1, toInject, true, 0, 0, false, 0, -1);*/
 
 			// Commented code to change the position of the sound source depending on the scale of the train
 			// Could be implemented but needs more work/proper positions for like the wheels and stuff
@@ -400,7 +400,7 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: update
 			bytes = patchMethodInClass(obfuscated, bytes, "update", "()V", Opcodes.INVOKESPECIAL,
 					AbstractInsnNode.METHOD_INSN, "<init>", "(ILjava/lang/String;FFF)V", -1, toInject, true, 0, 0, false, -5, -1);*/
-		} else
+		//} else
 
 		if (obfuscated.equals("org.orecruncher.dsurround.client.sound.SoundEffect") && Config.dsPatching && shouldPatchDS(false)) {
 			// Inside SoundEffect
@@ -615,9 +615,9 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: updateVolume
 			bytes = patchMethodInClass(obfuscated, bytes, "updateVolume", "(Lnet/minecraft/entity/player/EntityPlayer;)V", cmpgType,
 					AbstractInsnNode.INSN, null, null, -1, toInject, false, 0, 0, true, 0, -1);
-		} else
+		}// else
 
-		if (obfuscated.equals("net.gliby.voicechat.client.sound.ClientStreamManager") && Config.glibyVCSrcPatching) {
+		/*if (obfuscated.equals("net.gliby.voicechat.client.sound.ClientStreamManager") && Config.glibyVCSrcPatching) {
 
 			InsnList toInject = new InsnList();
 
@@ -700,9 +700,9 @@ public class CoreModInjector implements IClassTransformer {
 			bytes = patchMethodInClass(obfuscated, bytes, "giveStream", "(Lnet/gliby/voicechat/client/sound/Datalet;)V", Opcodes.INVOKEVIRTUAL,
 					AbstractInsnNode.METHOD_INSN, "feedRawAudioData", null, -1, toInject, false, 0, 0, false, 0, -1);
 
-		} else
+		} else*/
 
-		if (obfuscated.equals("net.gliby.voicechat.client.sound.thread.ThreadUpdateStream") && Config.glibyVCSrcPatching) {
+		/*if (obfuscated.equals("net.gliby.voicechat.client.sound.thread.ThreadUpdateStream") && Config.glibyVCSrcPatching) {
 
 			InsnList toInject = new InsnList();
 
@@ -782,9 +782,9 @@ public class CoreModInjector implements IClassTransformer {
 			bytes = patchMethodInClass(obfuscated, bytes, "run", "()V", Opcodes.INVOKEVIRTUAL,
 					AbstractInsnNode.METHOD_INSN, "setVolume", null, -1, toInject, true, 0, 0, false, 0, 2);
 
-		} else
+		} else*/
 
-		if (obfuscated.equals("net.gliby.voicechat.common.networking.ServerStreamManager") && Config.glibyVCSrcPatching) {
+		/*if (obfuscated.equals("net.gliby.voicechat.common.networking.ServerStreamManager") && Config.glibyVCSrcPatching) {
 
 			InsnList toInject = new InsnList();
 
@@ -808,7 +808,7 @@ public class CoreModInjector implements IClassTransformer {
 					"(Lnet/gliby/voicechat/common/networking/ServerStream;Lnet/gliby/voicechat/common/networking/ServerDatalet;)V",
 					Opcodes.DCMPG, AbstractInsnNode.INSN, null, null, -1, toInject, true, 0, 0, false, 0, 1);
 
-		}
+		}*/
 
 		//log("Finished processing class: '"+obfuscated+"' ('"+deobfuscated+"')");
 
