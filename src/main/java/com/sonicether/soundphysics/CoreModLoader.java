@@ -40,16 +40,11 @@ public class CoreModLoader implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
 	@Override
 	public List<String> getMixinConfigs() {
-		return Arrays.asList("soundphysics.vanilla.mixin.json", "soundphysics.gliby.mixin.json");
+		return Collections.singletonList("soundphysics.vanilla.mixin.json");
 	}
 
 	@Override
 	public boolean shouldMixinConfigQueue(String mixinConfig) {
-		return true;
-		/*switch (mixinConfig) {
-			case "soundphysics.gliby.mixin.json": return Config.glibyVCPatching;
-			case "soundphysics.vanilla.mixin.json": return true;
-			default: return false;
-		}*/
-	}
+        return mixinConfig.equals("soundphysics.vanilla.mixin.json");
+    }
 }

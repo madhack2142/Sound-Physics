@@ -232,7 +232,7 @@ public class CoreModInjector implements IClassTransformer {
 		} else*/
 
 		// Fix for computronics's devices
-		if (obfuscated.equals("pl.asie.lib.audio.StreamingAudioPlayer") && Config.computronicsPatching) {
+		/*if (obfuscated.equals("pl.asie.lib.audio.StreamingAudioPlayer") && Config.computronicsPatching) {
 			// Inside StreamingAudioPlayer
 			InsnList toInject = new InsnList();
 
@@ -262,9 +262,9 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: setHearing
 			bytes = patchMethodInClass(obfuscated, bytes, "setHearing", "(FF)V", Opcodes.FLOAD,
 					AbstractInsnNode.VAR_INSN, "", null, 1, toInject, false, 0, 0, false, 0, -1);
-		} else
+		} else*/
 
-		if (obfuscated.equals("pl.asie.computronics.api.audio.AudioPacket") && Config.computronicsPatching) {
+		/*if (obfuscated.equals("pl.asie.computronics.api.audio.AudioPacket") && Config.computronicsPatching) {
 			// Inside AudioPacket
 			InsnList toInject = new InsnList();
 
@@ -280,9 +280,9 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: canHearReceiver
 			bytes = patchMethodInClass(obfuscated, bytes, "canHearReceiver", "(Lnet/minecraft/entity/player/EntityPlayerMP;Lpl/asie/computronics/api/audio/IAudioReceiver;)Z", Opcodes.IMUL,
 					AbstractInsnNode.INSN, "", null, -1, toInject, false, 0, 0, false, 0, -1);
-		} else
+		} else*/
 
-		if (obfuscated.equals("pl.asie.computronics.tile.TileTapeDrive$1") && Config.computronicsPatching) {
+		/*if (obfuscated.equals("pl.asie.computronics.tile.TileTapeDrive$1") && Config.computronicsPatching) {
 			// Inside TileTapeDrive.internalSpeaker
 			InsnList toInject = new InsnList();
 
@@ -301,9 +301,9 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: getSoundPos
 			bytes = patchMethodInClass(obfuscated, bytes, "getSoundPos", "()Lnet/minecraft/util/math/Vec3d;", Opcodes.ARETURN,
 					AbstractInsnNode.INSN, "", null, -1, toInject, true, 0, 0, false, 0, -1);
-		} else
+		} else*/
 
-		if (obfuscated.equals("pl.asie.computronics.tile.TileSpeaker") && Config.computronicsPatching) {
+		/*if (obfuscated.equals("pl.asie.computronics.tile.TileSpeaker") && Config.computronicsPatching) {
 			// Inside TileSpeaker
 			InsnList toInject = new InsnList();
 
@@ -320,9 +320,9 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: getSoundPos
 			bytes = patchMethodInClass(obfuscated, bytes, "getSoundPos", "()Lnet/minecraft/util/math/Vec3d;", Opcodes.ARETURN,
 					AbstractInsnNode.INSN, "", null, -1, toInject, true, 0, 0, false, 0, -1);
-		} else
+		} else*/
 
-		if (obfuscated.equals("pl.asie.computronics.tile.TileSpeechBox$1") && Config.computronicsPatching) {
+		/*if (obfuscated.equals("pl.asie.computronics.tile.TileSpeechBox$1") && Config.computronicsPatching) {
 			// Inside TileSpeechBox.internalSpeaker
 			InsnList toInject = new InsnList();
 
@@ -341,7 +341,7 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: getSoundPos
 			bytes = patchMethodInClass(obfuscated, bytes, "getSoundPos", "()Lnet/minecraft/util/math/Vec3d;", Opcodes.ARETURN,
 					AbstractInsnNode.INSN, "", null, -1, toInject, true, 0, 0, false, 0, -1);
-		} else
+		} else*/
 
 		if ((obfuscated.equals("cam72cam.immersiverailroading.sound.ClientSound") || obfuscated.equals("cam72cam.mod.sound.ClientSound")) && Config.irPatching) {
 			// Inside ClientSound

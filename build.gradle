@@ -75,6 +75,9 @@ repositories {
 			includeGroup "curse.maven"
 		}
 	}
+	flatDir {
+		dirs 'libs'
+	}
 }
 
 dependencies {
@@ -87,8 +90,10 @@ dependencies {
 	compileOnly "curse.maven:ir-277736:3437738" //Immersive Railroading
 	compileOnly "curse.maven:dynsur-238891:2922489" //Dynamic Surroundings
 	//compileOnly "curse.maven:midnight-304881:2727758" //The Midnight
+	compileOnly "mush:themidnight:0.3.5"
 	//compileOnly "curse.maven:ic2exp-242638:3838713" //IC2 EXP
 	compileOnly "curse.maven:ic2c-242942:4476676" //IC2 Classic
+	compileOnly "stub:Computronics:1.12.2-1.6.6:deobf" // Computronics
 
 }
 
