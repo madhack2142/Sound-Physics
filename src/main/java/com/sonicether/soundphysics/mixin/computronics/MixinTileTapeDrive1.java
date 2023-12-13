@@ -12,7 +12,7 @@ import pl.asie.computronics.Computronics;
 import pl.asie.computronics.block.BlockTapeReader;
 import pl.asie.computronics.tile.TileTapeDrive;
 
-@Mixin(targets = "Lpl/asie/computronics/tile/TileTapeDrive$1")
+@Mixin(targets = "pl.asie.computronics.tile.TileTapeDrive$1", remap = false)
 public class MixinTileTapeDrive1 {
     @Shadow @Final TileTapeDrive this$0;
     @ModifyReturnValue(method = "getSoundPos()Lnet/minecraft/util/math/Vec3d;", at = @At("RETURN"))

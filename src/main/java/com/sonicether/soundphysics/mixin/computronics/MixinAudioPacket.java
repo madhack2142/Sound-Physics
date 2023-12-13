@@ -11,9 +11,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import pl.asie.computronics.api.audio.AudioPacket;
 import pl.asie.computronics.api.audio.IAudioReceiver;
 
-@Mixin(AudioPacket.class)
+@Mixin(value = AudioPacket.class, remap = false)
 public class MixinAudioPacket {
-    @Inject(method = "canHearReceiver", at = @At(value = "STORE", ordinal = 0, shift = At.Shift.AFTER))
+    @Inject(method = "canHearReceiver", at = @At(value = "INVOKE", target = "Lpl/asie/computronics/api/audio/IAudioReceiver;getSoundPos()Lnet/minecraft/util/math/Vec3d;"))
     private void injectDistance(EntityPlayerMP playerMP, IAudioReceiver receiver, CallbackInfoReturnable<Boolean> cir, @Local LocalIntRef mdsq) {
         mdsq.set(mdsq.get() * (int) (SoundPhysics.soundDistanceAllowance * SoundPhysics.soundDistanceAllowance));
     }

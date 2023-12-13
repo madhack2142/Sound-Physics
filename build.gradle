@@ -6,7 +6,7 @@ buildscript {
 	}
 	dependencies {
 		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.+', changing: true
-		classpath "org.spongepowered:mixingradle:0.7-SNAPSHOT"
+		classpath "org.spongepowered:mixingradle:0.7.38"
 	}
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -83,8 +83,17 @@ repositories {
 dependencies {
 	minecraft "net.minecraftforge:forge:1.12.2-14.23.5.2860"
 
-	annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
-	implementation "zone.rong:mixinbooter:8.9"
+	annotationProcessor 'org.ow2.asm:asm-debug-all:5.2'
+	annotationProcessor 'com.google.guava:guava:32.1.2-jre'
+	annotationProcessor 'com.google.code.gson:gson:2.8.9'
+
+	annotationProcessor ("zone.rong:mixinbooter:8.9") {
+		transitive = false
+	}
+
+	implementation ("zone.rong:mixinbooter:8.9") {
+		transitive = false
+	}
 
 	compileOnly "curse.maven:glibyvc-296045:3882806" //Gliby's Voice Chat Reloaded
 	compileOnly "curse.maven:ir-277736:3437738" //Immersive Railroading

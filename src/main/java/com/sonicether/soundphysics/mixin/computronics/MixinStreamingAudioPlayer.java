@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pl.asie.lib.audio.StreamingAudioPlayer;
 
-@Mixin(StreamingAudioPlayer.class)
+@Mixin(value = StreamingAudioPlayer.class, remap = false)
 public class MixinStreamingAudioPlayer {
     @Shadow private float distance;
 

@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import pl.asie.computronics.Computronics;
 import pl.asie.computronics.tile.TileSpeaker;
 
-@Mixin(TileSpeaker.class)
+@Mixin(value = TileSpeaker.class, remap = false)
 public class MixinTileSpeaker {
     @ModifyReturnValue(method = "getSoundPos", at = @At("RETURN"))
     private Vec3d applyOffset(Vec3d origin) {
