@@ -33,19 +33,14 @@ import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
+import static com.sonicether.soundphysics.LateMixinLoader.isIC2Classic;
+
 public class CoreModInjector implements IClassTransformer {
 
 	public static final Logger logger = LogManager.getLogger(SoundPhysics.modid+"injector");
 
 
-	private static boolean isIC2Classic() {
-		if (Loader.isModLoaded("ic2")) {
-			Map<String,ModContainer> mods = Loader.instance().getIndexedModList();
-			String version = mods.get("ic2").getVersion();
-            return !version.endsWith("ex112");
-        }
-		return false;
-	}
+
 
 	@Override
 	public byte[] transform(final String obfuscated, final String deobfuscated, byte[] bytes) {
@@ -412,7 +407,7 @@ public class CoreModInjector implements IClassTransformer {
 					AbstractInsnNode.METHOD_INSN, "noAttenuation", null, -1, toInject, false, 0, 0, true, 0, -1);
 		} else*/
 
-		if (obfuscated.equals("com.mushroom.midnight.client.SoundReverbHandler") && Config.midnightPatching) {
+		/*if (obfuscated.equals("com.mushroom.midnight.client.SoundReverbHandler") && Config.midnightPatching) {
 			// Inside SoundReverbHandler
 			InsnList toInject = new InsnList();
 
@@ -422,7 +417,7 @@ public class CoreModInjector implements IClassTransformer {
 			// Target method: onPlaySound
 			bytes = patchMethodInClass(obfuscated, bytes, "onPlaySound", "(I)V", Opcodes.GETSTATIC,
 					AbstractInsnNode.FIELD_INSN, "", null, -1, toInject, true, 0, 0, false, 0, 0);
-		} else
+		} else*/
 
 		if (obfuscated.equals("ic2.core.audio.AudioManagerClient") && Config.ic2Patching) {
 			// Inside AudioManagerClient
@@ -432,11 +427,11 @@ public class CoreModInjector implements IClassTransformer {
 			String posSpecClass = "ic2/core/audio/PositionSpec";
 			String playOnceDesc = "(Ljava/lang/Object;Lic2/core/audio/PositionSpec;Ljava/lang/String;ZF)Ljava/lang/String;";
 			int quickPlayRemoveCnt = 7;
-			if (ic2Classic) {
+			/*if (ic2Classic) {
 				posSpecClass = "ic2/api/classic/audio/PositionSpec";
 				playOnceDesc = "(Ljava/lang/Object;Lic2/api/classic/audio/PositionSpec;Lnet/minecraft/util/ResourceLocation;ZF)V";
 				quickPlayRemoveCnt = 6;
-			}
+			}*/
 
 			toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
 					"attenuationModel", "I"));
@@ -445,8 +440,8 @@ public class CoreModInjector implements IClassTransformer {
 			toInject.add(new VarInsnNode(Opcodes.ALOAD, 2));
 			toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, posSpecClass, "ordinal", "()I", false));
 			toInject.add(new VarInsnNode(Opcodes.ALOAD, 3));
-			if (ic2Classic)//toString
-				toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "nf", "func_110623_a", "()Ljava/lang/String;", false));
+			//if (ic2Classic)//toString
+				//toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "nf", "func_110623_a", "()Ljava/lang/String;", false));
 			toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/sonicether/soundphysics/SoundPhysics",
 					"setLastSound", "(ILjava/lang/String;)V", false));
 
@@ -473,19 +468,19 @@ public class CoreModInjector implements IClassTransformer {
 			String audioPosClass = "ic2/core/audio/AudioPosition";
 			String posSpecField = "positionSpec";
 			int cmpgType = Opcodes.FCMPG;
-			if (ic2Classic) {
+			/*if (ic2Classic) {
 				posSpecClass = "ic2/api/classic/audio/PositionSpec";
 				audioPosClass = "ic2/api/classic/audio/IAudioPosition";
 				posSpecField = "soundType";
 				cmpgType = Opcodes.DCMPG;
-			}
+			}*/
 
 			toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
 			toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "ic2/core/audio/AudioSourceClient", posSpecField,
 					"L"+posSpecClass+";"));
 			toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, posSpecClass, "ordinal", "()I", false));
 			if (ic2Classic) {
-				toInject.add(new InsnNode(Opcodes.ACONST_NULL));
+				//toInject.add(new InsnNode(Opcodes.ACONST_NULL));
 			} else {
 				toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
 				toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "ic2/core/audio/AudioSourceClient", "initialSoundFile",
@@ -499,14 +494,14 @@ public class CoreModInjector implements IClassTransformer {
 					AbstractInsnNode.METHOD_INSN, "play", null, -1, toInject, true, 0, 0, false, 0, -1);
 
 			if (ic2Classic) {
-				toInject = new InsnList();
+				//toInject = new InsnList();
 
 				/*toInject.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/sonicether/soundphysics/SoundPhysics",
 						"globalVolumeMultiplier0", "F"));
 				toInject.add(new InsnNode(Opcodes.FMUL));*/
 
-				bytes = patchMethodInClass(obfuscated, bytes, "updateVolume", "(Lnet/minecraft/entity/player/EntityPlayer;)V", Opcodes.INVOKEINTERFACE,
-						AbstractInsnNode.METHOD_INSN, "getPosition", null, -1, toInject, true, 14, 0, false, -17, 1);
+				//bytes = patchMethodInClass(obfuscated, bytes, "updateVolume", "(Lnet/minecraft/entity/player/EntityPlayer;)V", Opcodes.INVOKEINTERFACE,
+						//AbstractInsnNode.METHOD_INSN, "getPosition", null, -1, toInject, true, 14, 0, false, -17, 1);
 			} else {
 				toInject = new InsnList();
 
@@ -528,7 +523,7 @@ public class CoreModInjector implements IClassTransformer {
 			}
 
 			if (ic2Classic) {
-				toInject = new InsnList();
+				/*toInject = new InsnList();
 
 				toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
 				toInject.add(new InsnNode(Opcodes.ACONST_NULL));
@@ -542,7 +537,7 @@ public class CoreModInjector implements IClassTransformer {
 
 				// Target method: updateVolume
 				bytes = patchMethodInClass(obfuscated, bytes, "updateVolume", "(Lnet/minecraft/entity/player/EntityPlayer;)V", Opcodes.INVOKEVIRTUAL,
-						AbstractInsnNode.METHOD_INSN, "func_174791_d", null, -1, toInject, false, 0, 0, false, 0, -1);
+						AbstractInsnNode.METHOD_INSN, "func_174791_d", null, -1, toInject, false, 0, 0, false, 0, -1);*/
 			} else {
 				toInject = new InsnList();
 
@@ -571,14 +566,14 @@ public class CoreModInjector implements IClassTransformer {
 			toInject = new InsnList();
 
 			if (ic2Classic) {
-				toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
+				/*toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
 				toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "ic2/core/audio/AudioSourceClient", "position",
 						"Lic2/api/classic/audio/IAudioPosition;"));
 				toInject.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "ic2/api/classic/audio/IAudioPosition",
 						"getPosition", "()Lnet/minecraft/util/math/Vec3d;"));
 				toInject.add(new VarInsnNode(Opcodes.ALOAD, 7));
 				toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/sonicether/soundphysics/SoundPhysics",
-						"ic2DistanceCheckHook", "(DDLbhe;Lbhe;)I", false));
+						"ic2DistanceCheckHook", "(DDLbhe;Lbhe;)I", false));*/
 			} else {
 				toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
 				toInject.add(new FieldInsnNode(Opcodes.GETFIELD, "ic2/core/audio/AudioSourceClient", "position",

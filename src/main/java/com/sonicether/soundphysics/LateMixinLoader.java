@@ -1,16 +1,33 @@
 package com.sonicether.soundphysics;
 
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import zone.rong.mixinbooter.ILateMixinLoader;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class LateMixinLoader implements ILateMixinLoader {
     @Override
     public List<String> getMixinConfigs() {
-        return Arrays.asList("soundphysics.gliby.mixin.json", "soundphysics.comp.mixin.json");
+        return Arrays.asList(
+                "soundphysics.gliby.mixin.json",
+                "soundphysics.glibysrc.mixin.json",
+                "soundphysics.comp.mixin.json",
+                "soundphysics.umc.mixin.json",
+                "soundphysics.midnight.mixin.json",
+                "soundphysics.ic2c.mixin.json");
+    }
+
+    static boolean isIC2Classic() {
+        if (Loader.isModLoaded("ic2")) {
+            Map<String, ModContainer> mods = Loader.instance().getIndexedModList();
+            String version = mods.get("ic2").getVersion();
+            return !version.endsWith("ex112");
+        }
+        return false;
     }
 
     @Override
@@ -26,6 +43,8 @@ public class LateMixinLoader implements ILateMixinLoader {
                 return Loader.isModLoaded("universalmodcore") && Config.irPatching;
             case "soundphysics.midnight.mixin.json":
                 return Loader.isModLoaded("midnight") && Config.midnightPatching;
+            case "soundphysics.ic2c.mixin.json":
+                return Loader.isModLoaded("ic2") && Config.ic2Patching && isIC2Classic();
             default: return ILateMixinLoader.super.shouldMixinConfigQueue(mixinConfig);
         }
     }

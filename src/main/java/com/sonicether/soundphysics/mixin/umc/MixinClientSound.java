@@ -72,6 +72,6 @@ public abstract class MixinClientSound {
 					AbstractInsnNode.METHOD_INSN, "<init>", "(ILjava/lang/String;FFF)V", -1, toInject, true, 0, 0, false, -5, -1);*/
     @Inject(method = "update", at = @At(value = "INVOKE", target = "Lpaulscode/sound/SoundSystem;CommandQueue(Lpaulscode/sound/CommandObject;)Z", ordinal = 0))
     private void injectGlobalVolume(CallbackInfo ci, @Local LocalFloatRef vol) {
-        vol.set(vol.get() * SoundPhysics.globalVolumeMultiplier0);
+        vol.set(SoundPhysics.applyGlobalVolumeMultiplier(vol.get()));
     }
 }

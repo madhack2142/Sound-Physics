@@ -468,7 +468,7 @@ public class SoundPhysics {
 		}
 
 		if ((category == SoundCategory.BLOCKS || blockPattern.matcher(name).matches() ||
-			(name == "openal" && !mc.world.isAirBlock(new BlockPos(soundX,soundY,soundZ)))) &&
+			(name.equals("openal") && !mc.world.isAirBlock(new BlockPos(soundX,soundY,soundZ)))) &&
 			(MathHelper.floor(playerPos.x) != MathHelper.floor(soundX) ||
 			 MathHelper.floor(playerPos.y) != MathHelper.floor(soundY) ||
 			 MathHelper.floor(playerPos.z) != MathHelper.floor(soundZ))) {
@@ -610,9 +610,8 @@ public class SoundPhysics {
 			final float rcpPrimaryRays = 1.0f / numRays;
 
 			for (int i = 0; i < numRays; i++) {
-				final float fi = i;
-				final float fiN = fi / numRays;
-				final float longitude = gAngle * fi;
+                final float fiN = (float) i / numRays;
+				final float longitude = gAngle * (float) i;
 				final float latitude = (float) Math.asin(fiN * 2.0f - 1.0f);
 
 				final Vec3d rayDir = new Vec3d(Math.cos(latitude) * Math.cos(longitude),
@@ -652,13 +651,13 @@ public class SoundPhysics {
 						energyTowardsPlayer *= blockReflectivity * 0.75f + 0.25f;
 
 						if (newRayHit == null) {
-							totalRayDistance += lastHitPos.distanceTo(playerPos);
+							totalRayDistance += (float) lastHitPos.distanceTo(playerPos);
 						} else {
 							final double newRayLength = lastHitPos.distanceTo(newRayHit.hitVec);
 
 							bounceReflectivityRatio[j] += blockReflectivity;
 
-							totalRayDistance += newRayLength;
+							totalRayDistance += (float) newRayLength;
 
 							lastHitPos = newRayHit.hitVec;
 							lastHitNormal = getNormalFromFacing(newRayHit.sideHit);
@@ -668,8 +667,7 @@ public class SoundPhysics {
 							// Cast one final ray towards the player. If it's
 							// unobstructed, then the sound source and the player
 							// share airspace.
-							if (Config.simplerSharedAirspaceSimulation && j == rayBounces - 1
-									|| !Config.simplerSharedAirspaceSimulation) {
+							if (!Config.simplerSharedAirspaceSimulation || j == rayBounces - 1) {
 								final Vec3d finalRayStart = new Vec3d(lastHitPos.x + lastHitNormal.x * 0.01,
 										lastHitPos.y + lastHitNormal.y * 0.01, lastHitPos.z + lastHitNormal.z * 0.01);
 
@@ -761,7 +759,7 @@ public class SoundPhysics {
 				sendCutoff3 *= 0.4f;
 			}
 
-			if (Config.midnightPatching && Config.midnightPatchingFix && mc.world.provider.getDimensionType().getName() == "midnight") {
+			if (Config.midnightPatching && Config.midnightPatchingFix && mc.world.provider.getDimensionType().getName().equals("midnight")) {
 				// Since the patch removes the incompatble reverb, readd some reverb everywhere
 				// It's not a great fix but it works fine
 				sendGain1 = MathHelper.clamp(sendGain1, 0.3f, 1.0f);

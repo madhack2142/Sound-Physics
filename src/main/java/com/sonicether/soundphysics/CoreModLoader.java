@@ -15,7 +15,8 @@ public class CoreModLoader implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
 	@Override
 	public String[] getASMTransformerClass() {
-		return new String[] { CoreModInjector.class.getName() };
+		//return new String[] { CoreModInjector.class.getName() };
+		return null;
 	}
 
 	@Override

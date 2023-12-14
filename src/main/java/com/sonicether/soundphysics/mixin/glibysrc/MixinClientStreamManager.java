@@ -35,7 +35,7 @@ public class MixinClientStreamManager {
     }
 
     @Inject(method = "giveStream", at = @At(value = "INVOKE", target = "Lnet/gliby/voicechat/client/sound/JitterBuffer;clearBuffer(I)V"))
-    private static void injectOnPlay(Datalet data, CallbackInfo ci, @Local String identifier) {
+    private void injectOnPlay(Datalet data, CallbackInfo ci, @Local String identifier) {
         SoundPhysics.onPlaySound(identifier);
     }
 }
