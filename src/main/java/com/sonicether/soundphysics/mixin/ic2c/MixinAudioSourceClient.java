@@ -11,11 +11,11 @@ import ic2.api.classic.audio.PositionSpec;
 import ic2.core.audio.AudioManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(targets = "ic2.core.audio.AudioSourceClient", remap = false)
@@ -51,8 +51,8 @@ public class MixinAudioSourceClient {
         distance.set(0.0);
     }
 
-    @Inject(method = "updateVolume", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/util/math/Vec3d;add(Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/Vec3d;"))
+    @Inject(method = "updateVolume", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;add(Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/Vec3d;"))
     private void injectHook(EntityPlayer player, CallbackInfo ci, @Local(ordinal = 0) Vec3d pos, @Local LocalIntRef i, @Share("dis") LocalDoubleRef dis) {
-        i.set(SoundPhysics.ic2DistanceCheckHook(i.get(), dis.get(), this.position.getPosition(), pos));
+        i.set(SoundPhysics.ic2DistanceCheckHook(i.get(), dis.get(), this.position.getPosition(), pos) - 1);
     }
 }

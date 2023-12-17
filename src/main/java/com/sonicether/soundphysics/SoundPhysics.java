@@ -53,7 +53,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 public class SoundPhysics {
 
 	public static final String modid = "soundphysics";
-	public static final String version = "${version}";
+	public static final String version = "1.1.0";
 	public static final String mcVersion = "1.12.2";
 
 	public static final Logger logger = LogManager.getLogger(modid);

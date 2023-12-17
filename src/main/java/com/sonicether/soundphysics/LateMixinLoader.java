@@ -45,6 +45,8 @@ public class LateMixinLoader implements ILateMixinLoader {
                 return Loader.isModLoaded("midnight") && Config.midnightPatching;
             case "soundphysics.ic2c.mixin.json":
                 return Loader.isModLoaded("ic2") && Config.ic2Patching && isIC2Classic();
+            case "soundphysics.ic2exp.mixin.json":
+                return Loader.isModLoaded("ic2") && Config.ic2Patching && !isIC2Classic();
             default: return ILateMixinLoader.super.shouldMixinConfigQueue(mixinConfig);
         }
     }
