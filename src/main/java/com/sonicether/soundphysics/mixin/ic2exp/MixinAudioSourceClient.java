@@ -53,14 +53,14 @@ public class MixinAudioSourceClient {
     }
 
 
-    @Inject(method = "updateVolume", at = @At(value = "JUMP", opcode = Opcodes.IFLE, ordinal = 1))
-    private void setDistanceZero(EntityPlayer player, CallbackInfo ci, @Local(ordinal = 5) LocalDoubleRef distance, @Share("dis") LocalDoubleRef dis) {
+    @Inject(method = "updateVolume", at = @At(value = "JUMP", opcode = Opcodes.IFGE, ordinal = 1))
+    private void setDistanceZero(EntityPlayer player, CallbackInfo ci, @Local(ordinal = 9) LocalFloatRef distance, @Share("dis") LocalFloatRef dis) {
         dis.set(distance.get());
-        distance.set(0.0);
+        distance.set(0.0F);
     }
 
-    @Inject(method = "updateVolume", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, ordinal = 29, shift = At.Shift.BY, by = -4))
-    private void injectHook(EntityPlayer player, CallbackInfo ci, @Local LocalIntRef i, @Local(ordinal = 3) float x, @Local(ordinal = 4) float y, @Local(ordinal = 5) float z, @Share("dis") LocalDoubleRef dis) {
-        i.set(SoundPhysics.ic2DistanceCheckHook((float) i.get(), (float) dis.get(), this.position.x, this.position.y, this.position.z, x, y, z) - 1);
+    @Inject(method = "updateVolume", at = @At(value = "JUMP", opcode = Opcodes.GOTO, ordinal = 2))
+    private void injectHook(EntityPlayer player, CallbackInfo ci, @Local LocalIntRef i, @Local(ordinal = 3) float x, @Local(ordinal = 4) float y, @Local(ordinal = 5) float z, @Share("dis") LocalFloatRef dis) {
+        i.set(SoundPhysics.ic2DistanceCheckHook((float) i.get(), dis.get(), this.position.x, this.position.y, this.position.z, x, y, z));
     }
 }

@@ -1,5 +1,5 @@
 {
-  "required": false,
+  "required": true,
   "package": "com.sonicether.soundphysics.mixin.computronics",
   "compatibilityLevel": "JAVA_8",
   "refmap": "soundphysics.mixins.refmap.json",

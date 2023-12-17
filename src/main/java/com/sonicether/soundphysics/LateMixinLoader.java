@@ -18,7 +18,8 @@ public class LateMixinLoader implements ILateMixinLoader {
                 "soundphysics.comp.mixin.json",
                 "soundphysics.umc.mixin.json",
                 "soundphysics.midnight.mixin.json",
-                "soundphysics.ic2c.mixin.json");
+                "soundphysics.ic2c.mixin.json",
+                "soundphysics.ic2exp.mixin.json");
     }
 
     static boolean isIC2Classic() {
