@@ -97,6 +97,10 @@ dependencies {
 	implementation ("zone.rong:mixinbooter:8.10-kappa") {
 		transitive = false
 	}
+	
+	runtimeOnly ("zone.rong:mixinbooter:8.10-kappa") {
+		transitive = false
+	}
 
 	compileOnly "curse.maven:glibyvc-296045:3882806" //Gliby's Voice Chat Reloaded
 	compileOnly "curse.maven:umc-371784:3654955" //Immersive Railroading
